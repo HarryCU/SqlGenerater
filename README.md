@@ -6,7 +6,7 @@
 - SQL分词 (70%)
 - 自定义SqlQuery (20%)
 - Linq的无缝连接 (0%)
-- 类型映射 [Type Mapping] (0%)
+- Type Mapping 类型映射 (0%)
 
 # 使用协议
 Apache License, Version 2.0
