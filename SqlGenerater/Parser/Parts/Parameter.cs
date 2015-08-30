@@ -14,24 +14,35 @@
  * limitations under the License.
  */
 
-using System;
-using SqlGenerater.Parser.Parts;
+using SqlGenerater.Parser.Visitor;
+using SqlGenerater.Utils;
 
-namespace SqlGenerater.Query.Parts
+namespace SqlGenerater.Parser.Parts
 {
-    public sealed class TableQueryPart : Table, ITableBaseQueryPart
+    public abstract class Parameter : Constant
     {
-        private readonly Type _type;
-
-        public TableQueryPart(string name, Alias alias, Type type)
-            : base(name, alias)
+        public string Key
         {
-            _type = type;
+            get;
+            private set;
         }
 
-        public Type Type
+        protected Parameter(string key, object value)
+            : base(value)
         {
-            get { return _type; }
+            Assert.CheckArgument(key, "key");
+            Key = key;
+        }
+
+        public override SqlPartType PartType
+        {
+            get { return SqlPartType.Parameter; }
+        }
+
+        public override void Accept(ISqlVisitor visitor)
+        {
+            visitor.Write(Key);
+            visitor.WriteParameter(this);
         }
     }
 }

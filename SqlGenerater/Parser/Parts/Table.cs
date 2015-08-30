@@ -19,26 +19,15 @@ using SqlGenerater.Utils;
 
 namespace SqlGenerater.Parser.Parts
 {
-    public abstract class Table : TableBase
+    public abstract class Table : TableWithColumnBase
     {
-        private readonly LazyRef<string> _nameRef;
-
-        protected Table(string name)
-            : this(name, new Alias(name))
-        {
-        }
+        private readonly string _name;
 
         protected Table(string name, Alias alias)
             : base(alias)
         {
             Assert.CheckArgument(name, "name");
-            _nameRef = new LazyRef<string>(() => name);
-        }
-
-        protected Table(Select select, Alias alias)
-            : base(alias)
-        {
-            _nameRef = new LazyRef<string>(@select.ToString);
+            _name = name;
         }
 
         public override SqlPartType PartType
@@ -48,7 +37,7 @@ namespace SqlGenerater.Parser.Parts
 
         public string Name
         {
-            get { return _nameRef.Value; }
+            get { return _name; }
         }
 
         public override void Accept(ISqlVisitor visitor)

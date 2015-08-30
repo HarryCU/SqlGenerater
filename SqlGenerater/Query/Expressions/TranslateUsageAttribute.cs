@@ -15,23 +15,29 @@
  */
 
 using System;
-using SqlGenerater.Parser.Parts;
+using System.Linq.Expressions;
 
-namespace SqlGenerater.Query.Parts
+namespace SqlGenerater.Query.Expressions
 {
-    public sealed class TableQueryPart : Table, ITableBaseQueryPart
+    [AttributeUsage(AttributeTargets.Class, Inherited = false)]
+    internal sealed class TranslateUsageAttribute : Attribute
     {
-        private readonly Type _type;
-
-        public TableQueryPart(string name, Alias alias, Type type)
-            : base(name, alias)
+        public ExpressionType ExpressionType
         {
-            _type = type;
+            get;
+            private set;
         }
 
-        public Type Type
+        public Type SqlPartType
         {
-            get { return _type; }
+            get;
+            private set;
+        }
+
+        public TranslateUsageAttribute(ExpressionType expressionType, Type sqlPartType)
+        {
+            ExpressionType = expressionType;
+            SqlPartType = sqlPartType;
         }
     }
 }

@@ -34,5 +34,40 @@ namespace SqlGenerater.Test
                 .Select(m => m.I)
                 .GetQueryString();
         }
+
+        [Fact]
+        public void Query_Where_with_paraemter_Test_1()
+        {
+            var query = new SqlQuery<UserModel>();
+
+            string dbp = "2";
+
+            var sql = query
+                .Where(m => m.Name == "4" && (m.Id >= 1 || m.Id >= 1) || m.Name == dbp && m.Name == "3")
+                .Select(p => new { I = p.Id, N = p.Name })
+                .Where(m => m.N == "1")
+                .Select(m => m.I)
+                .GetQueryString();
+        }
+
+        [Fact]
+        public void Query_Where_with_paraemter_Test_2()
+        {
+            string dbp = "2";
+
+            Query_Where_with_paraemter_Test_2_m("3");
+        }
+
+        private void Query_Where_with_paraemter_Test_2_m(string pdb)
+        {
+            var query = new SqlQuery<UserModel>();
+
+            var sql = query
+                    .Where(m => m.Name == "4" && (m.Id >= 1 || m.Id >= 1) || m.Name == pdb && m.Name == "3")
+                    .Select(p => new { I = p.Id, N = p.Name })
+                    .Where(m => m.N == "1")
+                    .Select(m => m.I)
+                    .GetQueryString();
+        }
     }
 }

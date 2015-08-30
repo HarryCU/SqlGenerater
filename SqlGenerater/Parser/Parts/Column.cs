@@ -60,11 +60,6 @@ namespace SqlGenerater.Parser.Parts
             get { return _alias; }
         }
 
-        internal string TrueName
-        {
-            get { return Alias != null ? Alias.ToString() : Name; }
-        }
-
         public override void Accept(ISqlVisitor visitor)
         {
             if (TableAlais == null)

@@ -15,6 +15,7 @@
  */
 
 using System.Diagnostics;
+using SqlGenerater.Parser.Parts;
 
 namespace SqlGenerater.Parser.Visitor
 {
@@ -24,6 +25,11 @@ namespace SqlGenerater.Parser.Visitor
         {
             Debug.Write(string.Format(text, args));
             Debug.Write(" ");
+        }
+
+        public override void WriteParameter(Parameter parameter)
+        {
+            Write("(Parameter)");
         }
     }
 }

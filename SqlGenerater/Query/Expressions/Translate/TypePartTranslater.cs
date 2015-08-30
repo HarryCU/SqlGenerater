@@ -21,7 +21,7 @@ using SqlGenerater.Query.Parts;
 
 namespace SqlGenerater.Query.Expressions.Translate
 {
-    [Translate(ExpressionType.Parameter, typeof(TypePart))]
+    [TranslateUsage(ExpressionType.Parameter, typeof(TypePart))]
     internal class TypePartParameterTranslater : AbstractTranslater<ParameterExpression>
     {
         protected override IEnumerable<SqlPart> DoTranslate(SqlPart current, ParameterExpression expression)

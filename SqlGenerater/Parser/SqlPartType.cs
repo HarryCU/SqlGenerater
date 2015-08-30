@@ -26,6 +26,7 @@ namespace SqlGenerater.Parser
         Where,
         LeftJoin,
         RightJoin,
+        InnerJoin,
         Experssion,
         Constant,
         Condition,
@@ -33,6 +34,7 @@ namespace SqlGenerater.Parser
         OrderBy,
         In,
         Alias,
+        Parameter,
         Extendsion
     }
 }

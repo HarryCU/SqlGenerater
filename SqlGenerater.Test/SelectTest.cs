@@ -54,7 +54,7 @@ namespace SqlGenerater.Test
                 //.Where(m => m.Id == "1")
                 .Select(m => m)
                 .Select(p => new { I = p.Id, N = p.Name })
-                .Select(m => m.I)
+                //.Select(m => m.I)
                 .GetQueryString();
         }
     }

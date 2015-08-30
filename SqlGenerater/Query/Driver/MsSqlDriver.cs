@@ -14,42 +14,25 @@
  * limitations under the License.
  */
 
-using System;
+using System.Reflection;
 using SqlGenerater.Parser.Parts;
 using SqlGenerater.Query.Parts;
+using SqlGenerater.Query.Utils;
 
 namespace SqlGenerater.Query.Driver
 {
     public class MsSqlDriver : AbstractSqlDriver
     {
-        public override Select CreateSelect(Type type)
+        private readonly NameBuilder _parameterNameBuilder = NameBuilder.Build("@P");
+
+        protected NameBuilder ParameterNameBuilder
         {
-            return new SelectQueryPart(CreateAlias(type), type);
+            get { return _parameterNameBuilder; }
         }
 
-        public override Select CreateSelect(Select @select, Type type)
+        public override Parameter CreateParameter(MemberInfo member, object value)
         {
-            return new SelectQueryPart(@select, CreateAlias(type), type);
-        }
-
-        public override TableBase CreateTable(string name, Type type)
-        {
-            return new TableQueryPart(name, CreateAlias(type), type);
-        }
-
-        public override TableBase CreateTable(Select @select, Type type)
-        {
-            return new TableQueryPart(@select, CreateAlias(type), type);
-        }
-
-        public override LeftJoin CreateLeftJoin(TableBase table, Type type)
-        {
-            return new LeftJoin(table);
-        }
-
-        public override RightJoin CreateRightJoin(TableBase table, Type type)
-        {
-            return new RightJoin(table);
+            return new ParameterQueryPart(ParameterNameBuilder.Next(), value, member);
         }
     }
 }

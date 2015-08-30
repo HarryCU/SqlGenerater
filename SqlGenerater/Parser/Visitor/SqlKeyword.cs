@@ -28,6 +28,7 @@ namespace SqlGenerater.Parser.Visitor
         RightBrace,
         LeftJoin,
         RightJoin,
+        InnerJoin,
         On,
         OrderBy,
         Asc,

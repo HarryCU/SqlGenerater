@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+using System;
 using System.Collections.Generic;
 using SqlGenerater.Parser.Parts;
 
@@ -38,6 +39,11 @@ namespace SqlGenerater.Parser.Visitor
             _stackSelects.Push(@select);
             Accept(@select);
             _stackSelects.Pop();
+        }
+
+        protected override void VisitParameter(Parameter parameter)
+        {
+            parameter.Accept(this);
         }
 
         protected override void VisitWhere(Where @where)

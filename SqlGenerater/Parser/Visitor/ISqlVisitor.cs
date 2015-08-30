@@ -16,6 +16,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Reflection;
+using SqlGenerater.Parser.Parts;
 
 namespace SqlGenerater.Parser.Visitor
 {
@@ -24,6 +26,7 @@ namespace SqlGenerater.Parser.Visitor
         void Visit(SqlPart part);
         void Write(string text, params object[] args);
         void WriteKeyword(SqlKeyword keyword);
+        void WriteParameter(Parameter parameter);
 
         void VisitParts<T>(IEnumerable<T> datas) where T : SqlPart;
         void VisitParts<T>(IEnumerable<T> datas, Action<T> action);

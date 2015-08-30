@@ -14,24 +14,36 @@
  * limitations under the License.
  */
 
-using System;
-using SqlGenerater.Parser.Parts;
+using System.Collections.Generic;
+using SqlGenerater.Utils;
 
-namespace SqlGenerater.Query.Parts
+namespace SqlGenerater.Parser.Parts
 {
-    public sealed class TableQueryPart : Table, ITableBaseQueryPart
+    public abstract class TableWithColumnBase : TableBase
     {
-        private readonly Type _type;
+        private readonly List<SqlPart> _columns;
 
-        public TableQueryPart(string name, Alias alias, Type type)
-            : base(name, alias)
+        public override IReadOnlyList<SqlPart> Columns
         {
-            _type = type;
+            get { return _columns; }
         }
 
-        public Type Type
+        public void AddColumn(SqlPart column)
         {
-            get { return _type; }
+            Assert.CheckNull(column);
+
+            _columns.Add(column);
+        }
+
+        public void AddColumns(IEnumerable<SqlPart> columns)
+        {
+            _columns.AddRange(columns);
+        }
+
+        protected TableWithColumnBase(Alias alias)
+            : base(alias)
+        {
+            _columns = new List<SqlPart>();
         }
     }
 }

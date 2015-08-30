@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProjectFile", "ProjectFile"
 		.gitignore = .gitignore
 		LICENSE = LICENSE
 		README.md = README.md
+		ShareAssemblyInfo.cs = ShareAssemblyInfo.cs
+		TODO.md = TODO.md
 	EndProjectSection
 EndProject
 Global

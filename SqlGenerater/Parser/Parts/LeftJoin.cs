@@ -18,14 +18,14 @@ namespace SqlGenerater.Parser.Parts
 {
     public class LeftJoin : Join
     {
-        public LeftJoin(TableBase table)
-            : base(table)
-        {
-        }
-
         public override SqlPartType PartType
         {
             get { return SqlPartType.LeftJoin; }
+        }
+
+        public LeftJoin(TableBase refrence, TableBase table, Expression condition)
+            : base(refrence, table, condition)
+        {
         }
     }
 }

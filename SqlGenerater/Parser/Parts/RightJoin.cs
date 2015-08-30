@@ -18,14 +18,14 @@ namespace SqlGenerater.Parser.Parts
 {
     public class RightJoin : Join
     {
-        public RightJoin(TableBase table)
-            : base(table)
-        {
-        }
-
         public override SqlPartType PartType
         {
             get { return SqlPartType.RightJoin; }
+        }
+
+        public RightJoin(TableBase refrence, TableBase table, Expression condition)
+            : base(refrence, table, condition)
+        {
         }
     }
 }

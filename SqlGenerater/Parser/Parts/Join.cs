@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+using System.Collections.Generic;
 using SqlGenerater.Parser.Visitor;
 using SqlGenerater.Utils;
 
@@ -21,12 +22,20 @@ namespace SqlGenerater.Parser.Parts
 {
     public abstract class Join : TableBase
     {
+        private readonly TableBase _refrence;
         private readonly TableBase _table;
 
-        protected Join(TableBase table)
-            : base(Assert.CheckNull(table).Alias)
+        protected Join(TableBase refrence, TableBase table, Expression condition)
+            : base(table.Alias)
         {
+            _refrence = refrence;
             _table = table;
+            Condition = condition;
+        }
+
+        public TableBase Refrence
+        {
+            get { return _refrence; }
         }
 
         public TableBase Table
@@ -34,7 +43,12 @@ namespace SqlGenerater.Parser.Parts
             get { return _table; }
         }
 
-        public Condition Condition { get; set; }
+        public Expression Condition { get; private set; }
+
+        public override IReadOnlyList<SqlPart> Columns
+        {
+            get { return _table.Columns; }
+        }
 
         public override void Accept(ISqlVisitor visitor)
         {
@@ -45,6 +59,9 @@ namespace SqlGenerater.Parser.Parts
                     break;
                 case SqlPartType.RightJoin:
                     visitor.WriteKeyword(SqlKeyword.RightJoin);
+                    break;
+                case SqlPartType.InnerJoin:
+                    visitor.WriteKeyword(SqlKeyword.InnerJoin);
                     break;
             }
             visitor.Visit(Table);

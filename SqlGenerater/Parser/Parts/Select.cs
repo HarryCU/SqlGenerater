@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using SqlGenerater.Parser.Visitor;
@@ -21,9 +22,8 @@ using SqlGenerater.Utils;
 
 namespace SqlGenerater.Parser.Parts
 {
-    public abstract class Select : TableBase
+    public abstract class Select : TableWithColumnBase
     {
-        private readonly List<SqlPart> _columns;
         private readonly List<TableBase> _tables;
 
         protected Select()
@@ -34,7 +34,6 @@ namespace SqlGenerater.Parser.Parts
         protected Select(Alias alias)
             : base(alias)
         {
-            _columns = new List<SqlPart>();
             _tables = new List<TableBase>();
             Parent = null;
         }
@@ -66,11 +65,6 @@ namespace SqlGenerater.Parser.Parts
             get { return SqlPartType.Select; }
         }
 
-        public IReadOnlyList<SqlPart> Columns
-        {
-            get { return _columns; }
-        }
-
         public IReadOnlyList<TableBase> Tables
         {
             get { return _tables; }
@@ -85,25 +79,29 @@ namespace SqlGenerater.Parser.Parts
 
         public OrderBy OrderBy { get; set; }
 
-        public void AddColumn(SqlPart column)
-        {
-            Assert.CheckNull(column);
-
-            _columns.Add(column);
-        }
-
-        public void AddColumns(IEnumerable<SqlPart> columns)
-        {
-            Assert.CheckNull(columns);
-            _columns.AddRange(columns);
-        }
-
         public void AddTable(TableBase table)
         {
-            Assert.CheckNull(table);
+            Assert.CheckArgument(table, "table");
+            AddTableBase(table);
+        }
+
+        public void AddTable(Join join)
+        {
+            Assert.CheckArgument(join, "table");
+
+            AddTableBase(join, () =>
+            {
+                AddColumns(join.Columns);
+            });
+        }
+
+        private void AddTableBase(TableBase table, Action action = null)
+        {
             if (!_tables.Contains(table))
             {
                 _tables.Add(table);
+                if (action != null)
+                    action();
             }
         }
 
@@ -137,7 +135,10 @@ namespace SqlGenerater.Parser.Parts
             if (HasTable)
             {
                 visitor.WriteKeyword(SqlKeyword.From);
-                visitor.VisitParts(Tables);
+                foreach (var table in Tables)
+                {
+                    visitor.Visit(table);
+                }
             }
 
             if (Where != null)
@@ -151,6 +152,8 @@ namespace SqlGenerater.Parser.Parts
                 visitor.WriteKeyword(SqlKeyword.RightBrace);
                 visitor.Visit(Alias);
             }
+
+            visitor.WriteKeyword(SqlKeyword.Blank);
         }
     }
 }

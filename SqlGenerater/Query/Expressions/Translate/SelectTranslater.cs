@@ -26,7 +26,7 @@ using Expression = System.Linq.Expressions.Expression;
 
 namespace SqlGenerater.Query.Expressions.Translate
 {
-    [Translate(ExpressionType.Lambda, typeof(Select))]
+    [TranslateUsage(ExpressionType.Lambda, typeof(Select))]
     internal sealed class SelectTranslater : AbstractTranslater<LambdaExpression>
     {
         protected override IEnumerable<SqlPart> DoTranslate(SqlPart current, LambdaExpression expression)
@@ -54,9 +54,15 @@ namespace SqlGenerater.Query.Expressions.Translate
                     }
                     break;
                 case ExpressionType.MemberAccess:
+                    CreateTable(currentSelect, body.UnpackToParamterExpr(), currentSelect.AddTable);
+                    currentSelect.AddColumns(TranslateList<Column>(currentSelect, body));
+                    break;
                 case ExpressionType.New:
                     {
-                        CreateTable(currentSelect, body.UnpackToParamterExpr(), currentSelect.AddTable);
+                        foreach (var parameter in expression.Parameters)
+                        {
+                            CreateTable(currentSelect, parameter, currentSelect.AddTable);
+                        }
                         currentSelect.AddColumns(TranslateList<Column>(currentSelect, body));
                     }
                     break;
@@ -73,19 +79,13 @@ namespace SqlGenerater.Query.Expressions.Translate
             Assert.CheckArgument(notFoundAppendAction, "notFoundAppendAction");
 
             Alias alias;
-            var table = current.FindTableBaseByType(expression.Type, out alias);
+            var table = GetData<TableBase>(expression) ?? current.FindTableBaseByType(expression.Type, out alias);
             if (table == null)
             {
-                table = Driver.CreateTable(expression.Type.Name, expression.Type);
+                table = Driver.CreateTable(expression.Type);
                 notFoundAppendAction(table);
             }
             return table;
-        }
-
-        private IEnumerable<SqlPart> CreateColumns(TableBase table, Type type)
-        {
-            var properties = type.GetProperties();
-            return properties.Select(property => Driver.CreateColumn(property, table));
         }
     }
 }

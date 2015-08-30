@@ -16,6 +16,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using SqlGenerater.Parser.Parts;
 using SqlGenerater.Utils;
 
@@ -49,6 +50,7 @@ namespace SqlGenerater.Parser.Visitor
                     break;
                 case SqlPartType.RightJoin:
                 case SqlPartType.LeftJoin:
+                case SqlPartType.InnerJoin:
                     VisitJoin(part as Join);
                     break;
                 case SqlPartType.Select:
@@ -63,10 +65,14 @@ namespace SqlGenerater.Parser.Visitor
                 case SqlPartType.Alias:
                     VisitAlias(part as Alias);
                     break;
-
+                case SqlPartType.Parameter:
+                    VisitParameter(part as Parameter);
+                    break;
             }
         }
+
         public abstract void Write(string text, params object[] args);
+
         public virtual void WriteKeyword(SqlKeyword keyword)
         {
             string word = null;
@@ -88,10 +94,13 @@ namespace SqlGenerater.Parser.Visitor
                     word = ")";
                     break;
                 case SqlKeyword.LeftJoin:
-                    word = " LEFT JOIN ";
+                    word = "LEFT JOIN ";
                     break;
                 case SqlKeyword.RightJoin:
-                    word = " RIGHT JOIN ";
+                    word = "RIGHT JOIN ";
+                    break;
+                case SqlKeyword.InnerJoin:
+                    word = "INNER JOIN ";
                     break;
                 case SqlKeyword.On:
                     word = " ON ";
@@ -119,6 +128,8 @@ namespace SqlGenerater.Parser.Visitor
                 Write(word);
         }
 
+        public abstract void WriteParameter(Parameter parameter);
+
         protected virtual void Accept(SqlPart part)
         {
             part.Accept(this);
@@ -126,6 +137,7 @@ namespace SqlGenerater.Parser.Visitor
 
         protected abstract void VisitAlias(Alias alias);
         protected abstract void VisitSelect(Select select);
+        protected abstract void VisitParameter(Parameter parameter);
         protected abstract void VisitWhere(Where where);
         protected abstract void VisitTable(TableBase table);
         protected abstract void VisitJoin(Join join);

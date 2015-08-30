@@ -16,6 +16,7 @@
 
 using System;
 using SqlGenerater.Parser.Visitor;
+using SqlGenerater.Query;
 
 namespace SqlGenerater.Parser
 {
@@ -23,6 +24,16 @@ namespace SqlGenerater.Parser
     {
         private static int _count;
         private readonly int _hashCode;
+
+        internal string DebugView
+        {
+            get
+            {
+                var visitor = new SqlQueryVisitor();
+                visitor.Visit(this);
+                return visitor.ToString();
+            }
+        }
 
         protected SqlPart()
         {

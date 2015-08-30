@@ -21,7 +21,7 @@ using SqlGenerater.Parser.Parts;
 
 namespace SqlGenerater.Query.Expressions.Translate
 {
-    [Translate(ExpressionType.Constant, typeof(Constant))]
+    [TranslateUsage(ExpressionType.Constant, typeof(Constant))]
     internal sealed class ConstantTranslater : AbstractTranslater<ConstantExpression>
     {
         protected override IEnumerable<SqlPart> DoTranslate(SqlPart current, ConstantExpression expression)

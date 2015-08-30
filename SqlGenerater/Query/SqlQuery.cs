@@ -36,14 +36,14 @@ namespace SqlGenerater.Query
         {
         }
 
-        private SqlQuery(SqlQueryBase query)
+        internal SqlQuery(SqlQueryBase query)
             : base(query.Driver)
         {
             ParentSelectPart = query.SelectPart;
             SelectPart = ParentSelectPart;
         }
 
-        private Select CreateSelect<TResult>(Expression<Func<TModel, TResult>> expression)
+        protected Select CreateSelect<TResult>(Expression<Func<TModel, TResult>> expression)
         {
             if (ParentSelectPart != null)
                 SelectPart = Driver.CreateSelect(ParentSelectPart, typeof(TModel));
@@ -63,14 +63,38 @@ namespace SqlGenerater.Query
             return new SqlQuery<TModel>(this);
         }
 
-        public string GetQueryString()
+        public IJoinSqlQuery<TModel, TLeftModel> InnerJoin<TLeftModel>(Expression<Func<TModel, TLeftModel, bool>> onExpression)
+        {
+            SelectPart = SelectPart ?? CreateSelect(m => m);
+            var join = Translater.Translate<InnerJoin>(Driver, SelectPart, onExpression);
+            SelectPart.AddTable(join);
+            return new JoinSqlQuery<TModel, TLeftModel>(this, join);
+        }
+
+        public IJoinSqlQuery<TModel, TLeftModel> LeftJoin<TLeftModel>(Expression<Func<TModel, TLeftModel, bool>> onExpression)
+        {
+            SelectPart = SelectPart ?? CreateSelect(m => m);
+            var join = Translater.Translate<LeftJoin>(Driver, SelectPart, onExpression);
+            SelectPart.AddTable(join);
+            return new JoinSqlQuery<TModel, TLeftModel>(this, join);
+        }
+
+        public IJoinSqlQuery<TModel, TRightModel> RightJoin<TRightModel>(Expression<Func<TModel, TRightModel, bool>> onExpression)
+        {
+            SelectPart = SelectPart ?? CreateSelect(m => m);
+            var join = Translater.Translate<RightJoin>(Driver, SelectPart, onExpression);
+            SelectPart.AddTable(join);
+            return new JoinSqlQuery<TModel, TRightModel>(this, join);
+        }
+
+        public SqlString GetQueryString()
         {
             if (SelectPart == null)
                 return null;
 
             var visitor = new SqlQueryVisitor();
             visitor.Visit(SelectPart);
-            return visitor.ToString();
+            return visitor.SqlString;
         }
     }
 }

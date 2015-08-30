@@ -20,11 +20,11 @@ using System.Runtime.InteropServices;
 // 有关程序集的常规信息通过以下
 // 特性集控制。更改这些特性值可修改
 // 与程序集关联的信息。
-[assembly: AssemblyTitle("SqlGenerater.Test")]
+[assembly: AssemblyTitle("SqlGenerater")]
 [assembly: AssemblyDescription("根据实体生成对应的SQL语句, 为任意ORM框架提供一个SQL生成组件.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("SqlGenerater.Test")]
+[assembly: AssemblyProduct("SqlGenerater")]
 [assembly: AssemblyCopyright("Copyright © 2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -40,8 +40,8 @@ using System.Runtime.InteropServices;
 
 //      主版本: 全部完成后+1
 //      次版本: 修复Bug递进+1
-//      生成号: 完成进度
-//      修订号: 日期-天
+//      生成号: 日期-天
+//      修订号: 小时
 //
-[assembly: AssemblyVersion("0.0.2.27")]
-[assembly: AssemblyFileVersion("0.0.2.27")]
+[assembly: AssemblyVersion("0.0.30.0")]
+[assembly: AssemblyFileVersion("0.0.30.17")]

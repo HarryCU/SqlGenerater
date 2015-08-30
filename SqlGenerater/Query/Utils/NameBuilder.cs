@@ -14,24 +14,30 @@
  * limitations under the License.
  */
 
-using System;
-using SqlGenerater.Parser.Parts;
+using SqlGenerater.Utils;
 
-namespace SqlGenerater.Query.Parts
+namespace SqlGenerater.Query.Utils
 {
-    public sealed class TableQueryPart : Table, ITableBaseQueryPart
+    public sealed class NameBuilder
     {
-        private readonly Type _type;
+        private long _counter;
+        private readonly string _prefix;
 
-        public TableQueryPart(string name, Alias alias, Type type)
-            : base(name, alias)
+        private NameBuilder(string prefix)
         {
-            _type = type;
+            Assert.CheckArgument(prefix, "prefix");
+            _counter = 0;
+            _prefix = prefix;
         }
 
-        public Type Type
+        public string Next()
         {
-            get { return _type; }
+            return string.Format("{0}{1}", _prefix, ++_counter);
+        }
+
+        public static NameBuilder Build(string prefix)
+        {
+            return new NameBuilder(prefix);
         }
     }
 }

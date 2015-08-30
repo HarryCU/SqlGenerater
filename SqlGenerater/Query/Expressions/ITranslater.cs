@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using SqlGenerater.Parser;
@@ -22,6 +23,6 @@ namespace SqlGenerater.Query.Expressions
 {
     internal interface ITranslater
     {
-        IEnumerable<SqlPart> Translate(ISqlDriver driver, SqlPart current, Expression expression);
+        IEnumerable<SqlPart> Translate(ISqlDriver driver, SqlPart current, Expression expression, Func<Expression, object> queryDataHanlder);
     }
 }

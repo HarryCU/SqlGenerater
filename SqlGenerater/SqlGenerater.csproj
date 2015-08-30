@@ -39,12 +39,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\ShareAssemblyInfo.cs">
+      <Link>Properties\ShareAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="IJoinSqlQuery.cs" />
     <Compile Include="ISqlGenerator.cs" />
     <Compile Include="ISqlQuery.cs" />
+    <Compile Include="Parser\Parts\InnerJoin.cs" />
+    <Compile Include="Parser\Parts\Parameter.cs" />
+    <Compile Include="Parser\Parts\TableWithColumnBase.cs" />
     <Compile Include="Query\Driver\MsSqlDriver.cs" />
     <Compile Include="Query\Expressions\AbstractTranslater.cs" />
     <Compile Include="Query\Expressions\ITranslater.cs" />
-    <Compile Include="Query\Expressions\TranslateAttribute.cs" />
+    <Compile Include="Query\Expressions\TranslateUsageAttribute.cs" />
     <Compile Include="Query\Expressions\Translater.cs" />
     <Compile Include="Query\Expressions\Translate\ColumnTranslater.cs" />
     <Compile Include="Query\Expressions\Translate\AliasTranslater.cs" />
@@ -54,9 +61,13 @@
     <Compile Include="Parser\Visitor\ISqlVisitor.cs" />
     <Compile Include="Parser\Visitor\RawSqlStringVisitor.cs" />
     <Compile Include="Parser\Visitor\SqlKeyword.cs" />
+    <Compile Include="Query\Expressions\Translate\ConditionTranslater.cs" />
+    <Compile Include="Query\Expressions\Translate\JoinTranslater.cs" />
+    <Compile Include="Query\Expressions\Translate\SqlParameterTranslater.cs" />
+    <Compile Include="Query\JoinSqlQuery.cs" />
+    <Compile Include="Query\Parts\ParameterQueryPart.cs" />
     <Compile Include="Query\SqlQueryBase.cs" />
     <Compile Include="Query\SqlQueryVisitor.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query\Expressions\Translate\ConstantTranslater.cs" />
     <Compile Include="Query\Expressions\Translate\SelectTranslater.cs" />
     <Compile Include="Query\Expressions\Translate\TypePartTranslater.cs" />
@@ -68,6 +79,8 @@
     <Compile Include="Query\Parts\TypePart.cs" />
     <Compile Include="Query\AbstractSqlDriver.cs" />
     <Compile Include="Query\SqlQuery.cs" />
+    <Compile Include="Query\Utils\NameBuilder.cs" />
+    <Compile Include="Query\Utils\ExpressionExtendsion.cs" />
     <Compile Include="Reflection\AssemblyResolver.cs" />
     <Compile Include="Reflection\IConstructor.cs" />
     <Compile Include="Reflection\IField.cs" />
@@ -98,6 +111,8 @@
     <Compile Include="Parser\Parts\Table.cs" />
     <Compile Include="Parser\Parts\TableBase.cs" />
     <Compile Include="Parser\Parts\Where.cs" />
+    <Compile Include="SqlParameter.cs" />
+    <Compile Include="SqlString.cs" />
     <Compile Include="SqlVisitException.cs" />
     <Compile Include="Utils\Assert.cs" />
     <Compile Include="Utils\Disposer.cs" />

@@ -22,6 +22,13 @@ namespace SqlGenerater
     public interface ISqlQuery<TModel> : ISqlGenerator
     {
         ISqlQuery<TResult> Select<TResult>(Expression<Func<TModel, TResult>> expression);
+
         ISqlQuery<TModel> Where(Expression<Func<TModel, bool>> expression);
+
+        IJoinSqlQuery<TModel, TLeftModel> InnerJoin<TLeftModel>(Expression<Func<TModel, TLeftModel, bool>> onExpression);
+
+        IJoinSqlQuery<TModel, TLeftModel> LeftJoin<TLeftModel>(Expression<Func<TModel, TLeftModel, bool>> onExpression);
+
+        IJoinSqlQuery<TModel, TRightModel> RightJoin<TRightModel>(Expression<Func<TModel, TRightModel, bool>> onExpression);
     }
 }

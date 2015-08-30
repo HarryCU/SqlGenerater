@@ -23,21 +23,38 @@ namespace SqlGenerater.Query
 {
     public interface ISqlDriver
     {
-        Alias CreateAlias(string name);
         Alias CreateAlias(Type type);
+
         Select CreateSelect(Type type);
+
         Select CreateSelect(Select select, Type type);
+
+        Parameter CreateParameter(MemberInfo member, object value);
+
         Where CreateWhere(Expression condition);
-        TableBase CreateTable(string name, Type type);
-        TableBase CreateTable(Select @select, Type type);
-        LeftJoin CreateLeftJoin(TableBase table, Type type);
-        RightJoin CreateRightJoin(TableBase table, Type type);
+
+        TableWithColumnBase CreateTable(Type type);
+
+        InnerJoin CreateInnerJoin(TableBase refrence, TableBase table, Expression condition);
+
+        LeftJoin CreateLeftJoin(TableBase refrence, TableBase table, Expression condition);
+
+        RightJoin CreateRightJoin(TableBase refrence, TableBase table, Expression condition);
+
         OrderBy CreateOrderBy();
+
         In CreateIn();
+
         Expression CreateExpression(SqlPart left, SqlOperator op, SqlPart right);
+
         Condition CreateCondition(SqlPart left, SqlOperator op, SqlPart right);
+
         Constant CreateConstant(object value);
+
         Column CreateColumn(MemberInfo member, TableBase table);
-        Column CreateColumn(MemberInfo member, Alias alias, TableBase table);
+
+        Column CreateColumn(MemberInfo member, string aliasName, TableBase table);
+
+        Column CreateColumn(MemberInfo member, MemberInfo aliasMember, TableBase table);
     }
 }

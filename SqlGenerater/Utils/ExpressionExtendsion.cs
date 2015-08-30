@@ -16,6 +16,7 @@
 
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace SqlGenerater.Utils
 {
@@ -32,6 +33,21 @@ namespace SqlGenerater.Utils
                     return ((MemberExpression)body).Expression;
             }
             return body;
+        }
+
+        public static string GetParamterExprName(this Expression body)
+        {
+            switch (body.NodeType)
+            {
+                case ExpressionType.Parameter:
+                    return ((ParameterExpression)body).Name;
+                case ExpressionType.New:
+                    var exprNew = (NewExpression)body;
+                    return exprNew.Arguments.First().GetParamterExprName();
+                case ExpressionType.MemberAccess:
+                    return ((MemberExpression)body).Expression.GetParamterExprName();
+            }
+            return null;
         }
 
         public static bool IsOpCondition(this Expression expression)
@@ -142,6 +158,21 @@ namespace SqlGenerater.Utils
             return 14;
         }
 
+        public static T Cast<T>(this Expression node)
+            where T : Expression
+        {
+            return node as T;
+        }
+
+        public static MemberInfo GetMemberInfo(this Expression expression)
+        {
+            if (expression.NodeType == ExpressionType.MemberAccess)
+                return expression.Cast<MemberExpression>().Member;
+            return null;
+        }
+
+        // NOTE: 从 System.Linq -> DebugViewWriter 源码内复制而来
+
         public static bool NeedsParentheses(this Expression parent, Expression child)
         {
             if (child == null)
@@ -153,17 +184,17 @@ namespace SqlGenerater.Utils
             {
                 if (nodeType != ExpressionType.Decrement && nodeType != ExpressionType.Increment)
                 {
-                    return NeedsParenthesesNext(parent, child);
+                    return NeedsParenthesesPrecedence(parent, child);
                 }
             }
             else if (nodeType != ExpressionType.Unbox && nodeType != ExpressionType.IsTrue && nodeType != ExpressionType.IsFalse)
             {
-                return NeedsParenthesesNext(parent, child);
+                return NeedsParenthesesPrecedence(parent, child);
             }
             return true;
         }
 
-        private static bool NeedsParenthesesNext(Expression parent, Expression child)
+        private static bool NeedsParenthesesPrecedence(Expression parent, Expression child)
         {
             int operatorPrecedence = child.GetOperatorPrecedence();
             int operatorPrecedence2 = parent.GetOperatorPrecedence();

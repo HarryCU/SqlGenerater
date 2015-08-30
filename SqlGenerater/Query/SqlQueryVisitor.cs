@@ -18,22 +18,28 @@ using System;
 using System.Text;
 using SqlGenerater.Parser.Parts;
 using SqlGenerater.Parser.Visitor;
+using SqlGenerater.Query.Parts;
 
 namespace SqlGenerater.Query
 {
     internal sealed class SqlQueryVisitor : RawSqlStringVisitor
     {
         private bool _outputTabString = true;
-        private readonly StringBuilder _builder;
+        private readonly SqlString _builder;
 
         public SqlQueryVisitor()
         {
-            _builder = new StringBuilder(256);
+            _builder = new SqlString();
+        }
+
+        public SqlString SqlString
+        {
+            get { return _builder; }
         }
 
         public override void Write(string text, params object[] args)
         {
-            _builder.AppendFormat(text, args);
+            _builder.Append(text, args);
         }
 
         private string CreateTabString(int fix = 0)
@@ -51,6 +57,13 @@ namespace SqlGenerater.Query
             _outputTabString = false;
             base.VisitWhere(@where);
             _outputTabString = true;
+        }
+
+        protected override void VisitJoin(Join @join)
+        {
+            if (_outputTabString)
+                Write("{0}{1}", Environment.NewLine, CreateTabString());
+            base.VisitJoin(@join);
         }
 
         public override void WriteKeyword(SqlKeyword keyword)
@@ -71,9 +84,15 @@ namespace SqlGenerater.Query
             }
         }
 
+        public override void WriteParameter(Parameter parameter)
+        {
+            var p = parameter as ParameterQueryPart;
+            if (p != null) _builder.AddParameter(p.Member, p.Key, p.Value);
+        }
+
         public override string ToString()
         {
-            return _builder.ToString();
+            return SqlString.ToString();
         }
     }
 }

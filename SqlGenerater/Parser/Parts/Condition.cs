@@ -33,19 +33,7 @@ namespace SqlGenerater.Parser.Parts
             : base(left, op, right)
         {
             NeedLeftBrace = NeedRightBrace = false;
-
-            //NeedLeftBrace = CompluteNeedBrace(left, m => m.NeedLeftBrace);
-            //NeedRightBrace = CompluteNeedBrace(left, m => m.NeedRightBrace);
         }
-
-        //protected bool CompluteNeedBrace(SqlPart part, Func<Condition, bool> func)
-        //{
-        //    if (part.PartType == SqlPartType.Condition)
-        //    {
-        //        return func(part as Condition);
-        //    }
-        //    return false;
-        //}
 
         private void WriteBrace(bool needBrace, ISqlVisitor visitor, SqlPart part)
         {

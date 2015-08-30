@@ -54,9 +54,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\ShareAssemblyInfo.cs">
+      <Link>Properties\ShareAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="JoinTest.cs" />
     <Compile Include="Model\UserModel.cs" />
     <Compile Include="SelectTest.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WhereTest.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -67,6 +70,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

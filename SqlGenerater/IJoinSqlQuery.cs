@@ -15,23 +15,12 @@
  */
 
 using System;
-using SqlGenerater.Parser.Parts;
+using System.Linq.Expressions;
 
-namespace SqlGenerater.Query.Parts
+namespace SqlGenerater
 {
-    public sealed class TableQueryPart : Table, ITableBaseQueryPart
+    public interface IJoinSqlQuery<TModel, TJoinModel> : ISqlQuery<TModel>
     {
-        private readonly Type _type;
-
-        public TableQueryPart(string name, Alias alias, Type type)
-            : base(name, alias)
-        {
-            _type = type;
-        }
-
-        public Type Type
-        {
-            get { return _type; }
-        }
+        ISqlQuery<TResult> Select<TResult>(Expression<Func<TModel, TJoinModel, TResult>> expression);
     }
 }

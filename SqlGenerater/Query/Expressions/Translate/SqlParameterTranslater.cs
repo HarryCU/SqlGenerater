@@ -14,30 +14,22 @@
  * limitations under the License.
  */
 
-using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Reflection;
+using SqlGenerater.Parser;
+using SqlGenerater.Parser.Parts;
+using SqlGenerater.Utils;
 
-namespace SqlGenerater.Query.Expressions
+namespace SqlGenerater.Query.Expressions.Translate
 {
-    [AttributeUsage(AttributeTargets.Class, Inherited = false)]
-    internal sealed class TranslateAttribute : Attribute
+    [TranslateUsage(ExpressionType.MemberAccess, typeof(Parameter))]
+    internal sealed class SqlParameterTranslater : AbstractTranslater<MemberExpression>
     {
-        public ExpressionType ExpressionType
+        protected override IEnumerable<SqlPart> DoTranslate(SqlPart current, MemberExpression expression)
         {
-            get;
-            private set;
-        }
-
-        public Type SqlPartType
-        {
-            get;
-            private set;
-        }
-
-        public TranslateAttribute(ExpressionType expressionType, Type sqlPartType)
-        {
-            ExpressionType = expressionType;
-            SqlPartType = sqlPartType;
+            var constantExpr = expression.Expression.Cast<ConstantExpression>();
+            yield return Driver.CreateParameter(GetData<MemberInfo>(expression), constantExpr.Value);
         }
     }
 }

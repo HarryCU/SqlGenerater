@@ -14,24 +14,23 @@
  * limitations under the License.
  */
 
-using System;
+using System.Reflection;
 using SqlGenerater.Parser.Parts;
 
 namespace SqlGenerater.Query.Parts
 {
-    public sealed class TableQueryPart : Table, ITableBaseQueryPart
+    public class ParameterQueryPart : Parameter
     {
-        private readonly Type _type;
-
-        public TableQueryPart(string name, Alias alias, Type type)
-            : base(name, alias)
+        public MemberInfo Member
         {
-            _type = type;
+            get;
+            private set;
         }
 
-        public Type Type
+        public ParameterQueryPart(string key, object value, MemberInfo member)
+            : base(key, value)
         {
-            get { return _type; }
+            Member = member;
         }
     }
 }

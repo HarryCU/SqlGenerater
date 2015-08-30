@@ -19,10 +19,11 @@ using System.Linq.Expressions;
 using SqlGenerater.Parser;
 using SqlGenerater.Parser.Parts;
 using SqlGenerater.Query.Parts;
+using SqlGenerater.Utils;
 
 namespace SqlGenerater.Query.Expressions.Translate
 {
-    [Translate(ExpressionType.New, typeof(Column))]
+    [TranslateUsage(ExpressionType.New, typeof(Column))]
     internal class ColumnNewTranslater : AbstractTranslater<NewExpression>
     {
         protected override IEnumerable<SqlPart> DoTranslate(SqlPart current, NewExpression expression)
@@ -31,22 +32,22 @@ namespace SqlGenerater.Query.Expressions.Translate
             var index = 0;
             foreach (var member in expression.Members)
             {
-                var argument = (MemberExpression)expression.Arguments[index];
-                var table = select.FindTableBaseByType(argument.Expression.Type);
-                yield return Driver.CreateColumn(argument.Member, Driver.CreateAlias(member.Name), table);
+                var argument = expression.Arguments[index].Cast<MemberExpression>();
+                var table = GetData<TableBase>(expression) ?? select.FindTableBaseByType(argument.Expression.Type);
+                yield return Driver.CreateColumn(argument.Member, member, table);
                 index++;
             }
         }
     }
 
-    [Translate(ExpressionType.MemberAccess, typeof(Column))]
+    [TranslateUsage(ExpressionType.MemberAccess, typeof(Column))]
     internal class ColumnMemberTranslater : AbstractTranslater<MemberExpression>
     {
         protected override IEnumerable<SqlPart> DoTranslate(SqlPart current, MemberExpression expression)
         {
             var select = (SelectQueryPart)current;
-            var table = select.FindTableBaseByType(expression.Expression.Type);
-            yield return Driver.CreateColumn(expression.Member, table);
+            var tableRefrence = GetData<TableBase>(expression) ?? select.FindTableBaseByType(expression.Expression.Type);
+            yield return Driver.CreateColumn(expression.Member, tableRefrence);
         }
     }
 }

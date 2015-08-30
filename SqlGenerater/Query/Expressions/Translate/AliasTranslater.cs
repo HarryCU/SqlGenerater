@@ -22,7 +22,7 @@ using SqlGenerater.Query.Parts;
 
 namespace SqlGenerater.Query.Expressions.Translate
 {
-    [Translate(ExpressionType.Parameter, typeof(Alias))]
+    [TranslateUsage(ExpressionType.Parameter, typeof(Alias))]
     internal class AliasParameterTranslater : AbstractTranslater<ParameterExpression>
     {
         protected override IEnumerable<SqlPart> DoTranslate(SqlPart current, ParameterExpression expression)

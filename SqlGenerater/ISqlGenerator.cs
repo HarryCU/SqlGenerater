@@ -18,6 +18,6 @@ namespace SqlGenerater
 {
     public interface ISqlGenerator
     {
-        string GetQueryString();
+        SqlString GetQueryString();
     }
 }

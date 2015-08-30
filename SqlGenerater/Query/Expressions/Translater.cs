@@ -34,7 +34,7 @@ namespace SqlGenerater.Query.Expressions
             var assembly = Assembly.GetExecutingAssembly();
 
             foreach (var attrData in Enumerable.Select(assembly.GetTypes()
-                    .Where(ReflectionHelper.HasAttribute<TranslateAttribute>), m => new { Type = m, AttributeData = ReflectionHelper.GetAttributeOne<TranslateAttribute>(m) }).ToList())
+                    .Where(ReflectionHelper.HasAttribute<TranslateUsageAttribute>), m => new { Type = m, AttributeData = ReflectionHelper.GetAttributeOne<TranslateUsageAttribute>(m) }).ToList())
             {
                 if (!Translaters.ContainsKey(attrData.AttributeData.ExpressionType))
                     Translaters.Add(attrData.AttributeData.ExpressionType, new ConcurrentDictionary<Type, ITranslater>());
@@ -43,19 +43,19 @@ namespace SqlGenerater.Query.Expressions
             }
         }
 
-        public static TPart Translate<TPart>(ISqlDriver driver, SqlPart current, Expression expression)
+        public static TPart Translate<TPart>(ISqlDriver driver, SqlPart current, Expression expression, Func<Expression, object> findExtendObjectHanlder = null)
             where TPart : SqlPart
         {
-            return TranslateList<TPart>(driver, current, expression).FirstOrDefault();
+            return TranslateList<TPart>(driver, current, expression, findExtendObjectHanlder).FirstOrDefault();
         }
 
-        public static IEnumerable<TPart> TranslateList<TPart>(ISqlDriver driver, SqlPart current, Expression expression)
+        public static IEnumerable<TPart> TranslateList<TPart>(ISqlDriver driver, SqlPart current, Expression expression, Func<Expression, object> findExtendObjectHanlder = null)
             where TPart : SqlPart
         {
             var type = typeof(TPart);
             if (Translaters.ContainsKey(expression.NodeType) && Translaters[expression.NodeType].ContainsKey(type))
             {
-                return Translaters[expression.NodeType][type].Translate(driver, current, expression).Cast<TPart>();
+                return Translaters[expression.NodeType][type].Translate(driver, current, expression, findExtendObjectHanlder).Cast<TPart>();
             }
             return null;
         }

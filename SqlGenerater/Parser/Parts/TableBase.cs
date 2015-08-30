@@ -14,11 +14,16 @@
  * limitations under the License.
  */
 
+using System.Collections.Generic;
+using SqlGenerater.Utils;
+
 namespace SqlGenerater.Parser.Parts
 {
     public abstract class TableBase : SqlPart
     {
         private Alias _alias;
+
+        public abstract IReadOnlyList<SqlPart> Columns { get; }
 
         protected TableBase(Alias alias)
         {
