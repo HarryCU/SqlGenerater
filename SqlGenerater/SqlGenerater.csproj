@@ -1,0 +1,134 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{954DFF5B-1DE4-46F2-BD3E-573BD57EDA7E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SqlGenerater</RootNamespace>
+    <AssemblyName>SqlGenerater</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\ShareAssemblyInfo.cs">
+      <Link>Properties\ShareAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="IJoinSqlQuery.cs" />
+    <Compile Include="ISqlGenerator.cs" />
+    <Compile Include="ISqlQuery.cs" />
+    <Compile Include="Parser\Parts\InnerJoin.cs" />
+    <Compile Include="Parser\Parts\Parameter.cs" />
+    <Compile Include="Parser\Parts\TableWithColumnBase.cs" />
+    <Compile Include="Query\Driver\MsSqlDriver.cs" />
+    <Compile Include="Query\Expressions\AbstractTranslater.cs" />
+    <Compile Include="Query\Expressions\ITranslater.cs" />
+    <Compile Include="Query\Expressions\TranslateUsageAttribute.cs" />
+    <Compile Include="Query\Expressions\Translater.cs" />
+    <Compile Include="Query\Expressions\Translate\ColumnTranslater.cs" />
+    <Compile Include="Query\Expressions\Translate\AliasTranslater.cs" />
+    <Compile Include="Parser\Parts\Alias.cs" />
+    <Compile Include="Parser\Visitor\AbstractSqlVisitor.cs" />
+    <Compile Include="Parser\Visitor\DebugViewSqlVisitor.cs" />
+    <Compile Include="Parser\Visitor\ISqlVisitor.cs" />
+    <Compile Include="Parser\Visitor\RawSqlStringVisitor.cs" />
+    <Compile Include="Parser\Visitor\SqlKeyword.cs" />
+    <Compile Include="Query\Expressions\Translate\ConditionTranslater.cs" />
+    <Compile Include="Query\Expressions\Translate\JoinTranslater.cs" />
+    <Compile Include="Query\Expressions\Translate\SqlParameterTranslater.cs" />
+    <Compile Include="Query\JoinSqlQuery.cs" />
+    <Compile Include="Query\Parts\ParameterQueryPart.cs" />
+    <Compile Include="Query\SqlQueryBase.cs" />
+    <Compile Include="Query\SqlQueryVisitor.cs" />
+    <Compile Include="Query\Expressions\Translate\ConstantTranslater.cs" />
+    <Compile Include="Query\Expressions\Translate\SelectTranslater.cs" />
+    <Compile Include="Query\Expressions\Translate\TypePartTranslater.cs" />
+    <Compile Include="Query\Expressions\Translate\WhereTranslater.cs" />
+    <Compile Include="Query\ISqlDriver.cs" />
+    <Compile Include="Query\Parts\ITableBaseQueryPart.cs" />
+    <Compile Include="Query\Parts\SelectQueryPart.cs" />
+    <Compile Include="Query\Parts\TableQueryPart.cs" />
+    <Compile Include="Query\Parts\TypePart.cs" />
+    <Compile Include="Query\AbstractSqlDriver.cs" />
+    <Compile Include="Query\SqlQuery.cs" />
+    <Compile Include="Query\Utils\NameBuilder.cs" />
+    <Compile Include="Query\Utils\ExpressionExtendsion.cs" />
+    <Compile Include="Reflection\AssemblyResolver.cs" />
+    <Compile Include="Reflection\IConstructor.cs" />
+    <Compile Include="Reflection\IField.cs" />
+    <Compile Include="Reflection\IMember.cs" />
+    <Compile Include="Reflection\IMethod.cs" />
+    <Compile Include="Reflection\Implements\ConstructorImplement.cs" />
+    <Compile Include="Reflection\Implements\FieldImplement.cs" />
+    <Compile Include="Reflection\Implements\MemberImplement.cs" />
+    <Compile Include="Reflection\Implements\MethodImplement.cs" />
+    <Compile Include="Reflection\Implements\PropertyImplement.cs" />
+    <Compile Include="Reflection\IProperty.cs" />
+    <Compile Include="Reflection\ReflectionHelper.cs" />
+    <Compile Include="Reflection\TypeExtensions.cs" />
+    <Compile Include="Parser\SqlPart.cs" />
+    <Compile Include="Parser\SqlPartType.cs" />
+    <Compile Include="Parser\Parts\Column.cs" />
+    <Compile Include="Parser\Parts\Condition.cs" />
+    <Compile Include="Parser\Parts\Constant.cs" />
+    <Compile Include="Parser\Parts\Expression.cs" />
+    <Compile Include="Parser\Parts\In.cs" />
+    <Compile Include="Parser\Parts\Join.cs" />
+    <Compile Include="Parser\Parts\LeftJoin.cs" />
+    <Compile Include="Parser\Parts\OrderBy.cs" />
+    <Compile Include="Parser\Parts\OrderByDirection.cs" />
+    <Compile Include="Parser\Parts\RightJoin.cs" />
+    <Compile Include="Parser\Parts\Select.cs" />
+    <Compile Include="Parser\Parts\SqlOperator.cs" />
+    <Compile Include="Parser\Parts\Table.cs" />
+    <Compile Include="Parser\Parts\TableBase.cs" />
+    <Compile Include="Parser\Parts\Where.cs" />
+    <Compile Include="SqlParameter.cs" />
+    <Compile Include="SqlString.cs" />
+    <Compile Include="SqlVisitException.cs" />
+    <Compile Include="Utils\Assert.cs" />
+    <Compile Include="Utils\Disposer.cs" />
+    <Compile Include="Utils\ExpressionExtendsion.cs" />
+    <Compile Include="Utils\LazyRef.cs" />
+    <Compile Include="Utils\Locker.cs" />
+    <Compile Include="Utils\SqlPartExtendsion.cs" />
+    <Compile Include="Utils\StringNullOrEmptyException.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
